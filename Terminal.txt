@@ -1,0 +1,222 @@
+Microsoft Windows [Version 10.0.19043.1645]
+(c) Корпорация Майкрософт (Microsoft Corporation). Все права защищены.
+
+(venv) D:\FPW-61\Final_Task_D2.9>pip list
+Package    Version
+---------- -------
+pip        21.1.2 
+setuptools 57.0.0 
+wheel      0.36.2 
+WARNING: You are using pip version 21.1.2; however, version 22.0.4 is available.
+You should consider upgrading via the 'D:\FPW-61\Final_Task_D2.9\venv\Scripts\python.exe -m pip install --upgrade pip' command.
+
+(venv) D:\FPW-61\Final_Task_D2.9>pip install django
+Collecting django
+  Using cached Django-4.0.4-py3-none-any.whl (8.0 MB)
+Collecting tzdata
+  Using cached tzdata-2022.1-py2.py3-none-any.whl (339 kB)
+Collecting asgiref<4,>=3.4.1
+  Using cached asgiref-3.5.0-py3-none-any.whl (22 kB)
+Successfully installed asgiref-3.5.0 django-4.0.4 sqlparse-0.4.2 tzdata-2022
+Successfully installed asgiref-3.5.0 django-4.0.4 sqlparse-0.4.2 tzdata-2022.1
+WARNING: You are using pip version 21.1.2; however, version 22.0.4 is available.
+You should consider upgrading via the 'D:\FPW-61\Final_Task_D2.9\venv\Scripts\python.exe -m pip install --upgrade pip' command.
+
+(venv) D:\FPW-61\Final_Task_D2.9>django-admin startproject project
+CommandError: 'D:\FPW-61\Final_Task_D2.9\project' already exists
+(venv) D:\FPW-61\Final_Task_D2.9>django-admin startproject project
+
+(venv) D:\FPW-61\Final_Task_D2.9>cd project
+
+(venv) D:\FPW-61\Final_Task_D2.9\project>python manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.     
+Run 'python manage.py migrate' to apply them.
+April 28, 2022 - 19:11:02
+Django version 4.0.4, using settings 'project.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+(venv) D:\FPW-61\Final_Task_D2.9\project>python manage.py startapp newapp
+
+(venv) D:\FPW-61\Final_Task_D2.9\project>python manage.py makemigrations
+Migrations for 'newapp':
+  newapp\migrations\0001_initial.py
+    - Create model Author
+    - Create model Category
+    - Create model Post
+    - Create model PostCategory
+    - Add field postCategory to post
+    - Create model Comment
+
+(venv) D:\FPW-61\Final_Task_D2.9\project>python manage.py migrate       
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, newapp, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying newapp.0001_initial... OK
+  Applying sessions.0001_initial... OK
+
+(venv) D:\FPW-61\Final_Task_D2.9\project>python manage.py shell  
+Python 3.10.1 (tags/v3.10.1:2cd268a, Dec  6 2021, 19:10:37) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "lisence" for more information.
+(InteractiveConsole)
+>>> from newapp.models import *
+>>> u1 = User.objects.create(username='Marina')
+>>> u1
+<User: Marina>
+>>> u2 = User.objects.create(username='SkillFactory')
+>>> u2
+<User: SkillFactory>
+>>> Author.objects.create(authorUser=u1)
+<Author: Author object (1)>
+>>> Author.objects.create(authorUser=u2)
+<Author: Author object (2)>
+>>> Category.objects.create(categoryName='IT')
+<Category: Category object (1)>
+>>> Category.objects.create(categoryName='Animals')
+<Category: Category object (2)>
+>>> Category.objects.create(categoryName='Culture')   
+<Category: Category object (3)>
+>>> Category.objects.create(categoryName='Science') 
+<Category: Category object (4)>
+>>> author = Author.objects.get(id=1) 
+>>> author
+<Author: Author object (1)>
+>>> Post.objects.create(author=author, categoryType='AR', postTitle='В Ленинградском зоопарке проснулись сурки', postText='Во время недавнего потепления на
+ши сурки Ижорик и Августина проснулись и вышли из своего домика встречать весну!')
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "D:\FPW-61\Final_Task_D2.9\venv\lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "D:\FPW-61\Final_Task_D2.9\venv\lib\site-packages\django\db\models\query.py", line 512, in create
+    obj = self.model(**kwargs)
+  File "D:\FPW-61\Final_Task_D2.9\venv\lib\site-packages\django\db\models\base.py", line 559, in __init__
+    raise TypeError(
+TypeError: Post() got an unexpected keyword argument 'author'
+>>> Post.objects.create(postAuthor=author, categoryType='AR', postTitle='В Ленинградском зоопарке проснулись сурки', postText='Во время недавнего потеплени
+я наши сурки Ижорик и Августина проснулись и вышли из своего домика встречать весну!')
+<Post: Post object (1)>
+>>> Post.object.get(id=1).title
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: type object 'Post' has no attribute 'object'
+>>> Post.objects.get(id=1).title 
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Post' object has no attribute 'title'
+>>> Post.objects.get(id=1).postTitle 
+'В Ленинградском зоопарке проснулись сурки'
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1)) 
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2)) 
+>>> Post.objects.get(id=1).postCategory                                
+<django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager object at 0x0000020B661D6AD0>
+>>> Post.objects.get(id=1).categoryType
+'AR'
+>>> Post.objects.create(postAuthor=author, categoryType='AR', postTitle='В итальянском театре La Scala пройдет концерт русских музыкантов', postText='Конце
+рт Транссибирского арт-фестиваля под руководством скрипача народного артиста России Вадима Репина состоится в миланском театре La Scala 16 мая.')
+<Post: Post object (2)>
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1)) 
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3)) 
+>>> Post.objects.get(id=2).postTitle                                    
+'В итальянском театре La Scala пройдет концерт русских музыкантов'
+>>> author = Author.objects.get(id=2) 
+>>> Post.objects.create(postAuthor=author, categoryType='NW', postTitle='Новый дайджест вакансий', postText='Если нет вакансии для вашего направления, знач
+ит мы ее не нашли. Она будет добавлена в новый дайджест, как только мы ее увидим.')
+<Post: Post object (3)>
+>>> Post.objects.get(id=3).postTitle  
+'Новый дайджест вакансий'
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1)) 
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=4)) 
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=1), commentText='Весна!')
+<Comment: Comment object (1)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=2), commentText='Ура! Сурки - молодцы.') 
+<Comment: Comment object (2)>
+>>> Comment.objects.get(id=1)
+<Comment: Comment object (1)>
+>>> Comment.objects.get(id=1).commentText
+'Весна!'
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=User.objects.get(id=1), commentText='Люблю Италию')          
+<Comment: Comment object (3)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=User.objects.get(id=2), commentText='Люблю скрипку')
+<Comment: Comment object (4)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=1), commentText='Для моего направления нет вакансии...') 
+<Comment: Comment object (5)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=2), commentText='Когда-нибудь будет!')                   
+<Comment: Comment object (6)>
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).commentRating
+1
+>>> Author.objects.get(id=1).authorRating
+0
+>>> User.objects.get(id=1).authorRating   
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'User' object has no attribute 'authorRating'
+>>> Comment.objects.get(id=1).like()        
+>>> Comment.objects.get(id=2).like() 
+>>> Comment.objects.get(id=3).like() 
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=4).like() 
+>>> Comment.objects.get(id=5).like() 
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=6).like() 
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=5).dislike() 
+>>> Comment.objects.get(id=5).commentRating 
+1
+>>> Comment.objects.get(id=3).commentRating 
+2
+>>> Author.objects.get(id=1).update_rating()
+>>> Author.objects.get(id=1).authorRating   
+5
+>>> Author.objects.get(id=2).update_rating() 
+>>> Author.objects.get(id=2).authorRating    
+4
+>>> Post.objects.get(id=1).like()
+>>> Author.objects.get(id=1).update_rating() 
+>>> Author.objects.get(id=1).authorRating    
+8
+>>> Author.objects.order_by('-authorRating')[:1]
+<QuerySet [<Author: Author object (1)>]>
+>>> Post.objects.get(id=3).like()                
+>>> Post.objects.get(id=3).like()
+>>> Post.objects.get(id=3).like()
+>>> Author.objects.order_by('-authorRating')[:1]
+<QuerySet [<Author: Author object (1)>]>
+>>> Author.objects.get(id=2).update_rating()     
+>>> Author.objects.order_by('-authorRating')[:1]
+<QuerySet [<Author: Author object (2)>]>
+>>> Author.objects.order_by('-authorRating')    
+<QuerySet [<Author: Author object (2)>, <Author: Author object (1)>]>
+>>> Author.objects.get(id=1).update_rating()     
+>>> Author.objects.order_by('-authorRating')     
+<QuerySet [<Author: Author object (2)>, <Author: Author object (1)>]>
+>>> a = Author.objects.order_by('-authorRating')[:1]
+>>> for i in a:
+...     i.authorRating
+...     i.authorUser.username
+... 
+13
+'SkillFactory'
+>>>
