@@ -1,0 +1,188 @@
+>>> from newapp.models import *
+
+
+1. Создать двух пользователей (с помощью метода User.objects.create_user('username')).
+
+>>> u1 = User.objects.create(username='Marina')
+>>> u1
+<User: Marina>
+>>> u2 = User.objects.create(username='SkillFactory')
+>>> u2
+<User: SkillFactory>
+
+
+2. Создать два объекта модели Author, связанные с пользователями.
+
+>>> Author.objects.create(authorUser=u1)
+<Author: Author object (1)>
+>>> Author.objects.create(authorUser=u2)
+<Author: Author object (2)>
+
+
+3. Добавить 4 категории в модель Category.
+
+>>> Category.objects.create(categoryName='IT')
+<Category: Category object (1)>
+>>> Category.objects.create(categoryName='Animals')
+<Category: Category object (2)>
+>>> Category.objects.create(categoryName='Culture')   
+<Category: Category object (3)>
+>>> Category.objects.create(categoryName='Science') 
+<Category: Category object (4)>
+
+
+4. Добавить 2 статьи и 1 новость.
+
+>>> author = Author.objects.get(id=1) 
+>>> author
+<Author: Author object (1)>
+>>> Post.objects.create(postAuthor=author, categoryType='AR', postTitle='В Ленинградском зоопарке проснулись сурки', postText='Во время недавнего потеплени
+я наши сурки Ижорик и Августина проснулись и вышли из своего домика встречать весну!')
+<Post: Post object (1)>
+>>> Post.objects.create(postAuthor=author, categoryType='AR', postTitle='В итальянском театре La Scala пройдет концерт русских музыкантов', postText='Конце
+рт Транссибирского арт-фестиваля под руководством скрипача народного артиста России Вадима Репина состоится в миланском театре La Scala 16 мая.')
+<Post: Post object (2)>
+>>> Post.objects.get(id=2).postTitle
+'В итальянском театре La Scala пройдет концерт русских музыкантов'
+>>> author = Author.objects.get(id=2) 
+>>> Post.objects.create(postAuthor=author, categoryType='NW', postTitle='Новый дайджест вакансий', postText='Если нет вакансии для вашего направления, знач
+ит мы ее не нашли. Она будет добавлена в новый дайджест, как только мы ее увидим.')
+<Post: Post object (3)>
+>>> Post.objects.get(id=3).postTitle  
+'Новый дайджест вакансий'
+
+
+5. Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий).
+
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=3))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+
+
+6. Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=1),
+commentText='Весна!')
+<Comment: Comment object (1)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=2), commentText='Ура!
+Сурки - молодцы.')
+<Comment: Comment object (2)>
+>>> Comment.objects.get(id=1).commentText
+'Весна!'
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=User.objects.get(id=1), commentText='Люблю
+Италию')
+<Comment: Comment object (3)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=User.objects.get(id=2), commentText='Люблю
+скрипку')
+<Comment: Comment object (4)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=1), commentText='Для
+моего направления нет вакансии...')
+<Comment: Comment object (5)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=2),
+commentText='Когда-нибудь будет!')
+<Comment: Comment object (6)>
+
+
+7. Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).commentRating
+1
+>>> Author.objects.get(id=1).authorRating
+0
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=2).like() 
+>>> Comment.objects.get(id=3).like() 
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=4).like() 
+>>> Comment.objects.get(id=5).like() 
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=6).like() 
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=5).dislike() 
+>>> Comment.objects.get(id=5).commentRating 
+1
+>>> Comment.objects.get(id=3).commentRating 
+2
+
+
+8. Обновить рейтинги пользователей.
+
+>>> Author.objects.get(id=1).update_rating()
+>>> Author.objects.get(id=1).authorRating   
+5
+>>> Author.objects.get(id=2).update_rating() 
+>>> Author.objects.get(id=2).authorRating    
+4
+>>> Post.objects.get(id=1).like()
+>>> Author.objects.get(id=1).update_rating() 
+>>> Author.objects.get(id=1).authorRating    
+8
+
+
+9. Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+
+>>> Author.objects.order_by('-authorRating')[:1]
+<QuerySet [<Author: Author object (1)>]>
+>>> Post.objects.get(id=3).like()                
+>>> Post.objects.get(id=3).like()
+>>> Post.objects.get(id=3).like()
+>>> Author.objects.get(id=2).update_rating()
+>>> Author.objects.order_by('-authorRating')[:1]
+<QuerySet [<Author: Author object (2)>]>
+>>> a = Author.objects.order_by('-authorRating')[:1]
+>>> for i in a:
+...     i.authorRating
+...     i.authorUser.username
+... 
+13
+'SkillFactory'
+>>>
+
+
+10. Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках
+ к этой статье.
+
+>>> Post.objects.order_by('-postRating')[:1]
+<QuerySet [<Post: Post object (3)>]>
+>>> best_ar = Post.objects.order_by('-postRating')[:1]
+>>> for i in best_ar:
+...     i.creationDate
+...     i.postAuthor.authorUser.username
+...     i.postRating
+...     i.postTitle
+...     i.preview()
+...
+datetime.datetime(2022, 4, 28, 18, 2, 27, 579868, tzinfo=datetime.timezone.utc)
+'SkillFactory'
+3
+'Новый дайджест вакансий'
+'Если нет вакансии для вашего направления, значит мы ее не нашли. Она будет добавлена в новый дайджест, как только мы ее уви...'
+
+
+11. Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+
+>>> all_comm = Comment.objects.all()
+>>> for i in best_ar:
+...     best = i
+...
+>>> best
+<Post: Post object (3)>
+>>> for i in all_comm:
+...     if i.commentPost_id == best.id:
+...             i.commentDate
+...             i.commentUser.username
+...             i.commentRating
+...             i.commentText
+...
+datetime.datetime(2022, 4, 28, 18, 12, 14, 56998, tzinfo=datetime.timezone.utc)
+'Marina'
+1
+'Для моего направления нет вакансии...'
+datetime.datetime(2022, 4, 28, 18, 12, 43, 904541, tzinfo=datetime.timezone.utc)
+'SkillFactory'
+2
+'Когда-нибудь будет!'
